@@ -1,0 +1,87 @@
+<!-- twitter @cicciosgamino
+
+   _______           _                                  _
+  / ____(_)_________(_)___  _________ _____ _____ ___  (_)___  ____
+ / /   / / ___/ ___/ / __ \/ ___/ __ `/ __ `/ __ `__ \/ / __ \/ __ \
+/ /___/ / /__/ /__/ / /_/ (__  ) /_/ / /_/ / / / / / / / / / / /_/ /
+\____/_/\___/\___/_/\____/____/\__, /\__,_/_/ /_/ /_/_/_/ /_/\____/
+                              /____/
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="author" content="@cicciosgamino"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Dark Theme</title>
+
+  <style>
+
+    html {
+      /* light and dark custom vars */
+      --bk-color: #fff;
+      --color: #222;
+      
+      --bk-color-dark: #222;
+      --color-dark: whitesmoke;
+    }
+
+    body:not([dark]) {
+      /* custom var and fallback value */ 
+      background-color: var(--bk-color, #fff);
+      color: var(--color, #222)
+    }
+    body[dark] {
+      /* custom var and fallback value */ 
+      background-color: var(--bk-color-dark, #121212);
+      color: var(--color-dark, whitesmoke)
+    }
+
+    body  {
+      margin: 0;
+      font-family: Roboto, Helvetica, Arial, sans-serif;
+      padding: 2em;
+      text-align: center;
+    }
+
+  </style>
+  
+</head>
+
+<body>
+  
+  <!-- LitElement with dark attribute -->
+  <my-app></my-app>
+
+  <noscript>
+    Please enable JavaScript to view this website.
+  </noscript>
+
+  <!-- Import Js Module -->
+  <script type="module" src="my-app.js"></script>
+
+  <script>
+    // propagate the attribute of app to body 
+    const body = document.querySelector('body')
+    const app = document.querySelector('my-app')
+    const config = { attributes: true, childList: false, subtree: false };
+    const callback = (mutationsList, observer) => {
+      for(let mutation of mutationsList) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'dark') {
+            // console.log(`@DARK >> ${app.hasAttribute('dark')}`)
+            app.hasAttribute('dark') ? 
+              body.setAttribute('dark', '') :
+              body.removeAttribute('dark')
+        }
+      }
+    }
+
+    const observer = new MutationObserver(callback)
+    observer.observe(app, config)
+  </script>
+
+</body>
+</html>

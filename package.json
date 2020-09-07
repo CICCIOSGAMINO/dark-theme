@@ -1,0 +1,12 @@
+{
+  "name": "dark-theme",
+  "version": "1.0.0",
+  "description": "Dark theme test ",
+  "main": "my-app.js",
+  "author": "@cicciosgamino",
+  "license": "Apache2.0",
+  "private": true,
+  "dependencies": {
+    "lit-element": "^2.4.0"
+  }
+}
