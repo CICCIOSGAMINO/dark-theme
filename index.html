@@ -64,10 +64,11 @@
   <script type="module" src="my-app.js"></script>
 
   <script>
-    // propagate the attribute of app to body 
+
     const body = document.querySelector('body')
     const app = document.querySelector('my-app')
-    const config = { attributes: true, childList: false, subtree: false };
+    const config = { attributes: true, childList: false, subtree: false }
+
     const callback = (mutationsList, observer) => {
       for(let mutation of mutationsList) {
         if (mutation.type === 'attributes' && mutation.attributeName === 'dark') {
@@ -80,7 +81,26 @@
     }
 
     const observer = new MutationObserver(callback)
-    observer.observe(app, config)
+
+    // Check if dark mode is supported by browser
+    if (window.matchMedia('(prefers-color-scheme)').media !== 'not all') {
+        console.log('@DARK-MODE >> Supported 🎉')
+        // init the observer to dark attribute
+        observer.observe(app, config)
+        
+        // init the listener to
+        window.matchMedia('(prefers-color-scheme: dark)').addListener((e) => {
+          const darkModeOn = e.matches;
+          darkModeOn ? 
+            app.setAttribute('dark', '') : 
+            app.removeAttribute('dark')
+          
+          console.log(`@DARK-MODE >> ${darkModeOn ? '🌒 ON' : '🌕 OFF'}`)
+        })
+
+      } else {
+        console.log('@DARK-MODE >> NOT Supported 🤢')
+      }
   </script>
 
 </body>

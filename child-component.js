@@ -1,8 +1,7 @@
-import { LitElement, html, css } from 'lit-element'
+import { LitElement, html, css } from 'lit'
 
 export class ChildComponent extends LitElement {
-
-  static get properties() {
+  static get properties () {
     return {
       dark: {
         type: Boolean,
@@ -11,7 +10,7 @@ export class ChildComponent extends LitElement {
     }
   }
 
-  static get styles() {
+  static get styles () {
     return css`
 
     /* handle the light / dark mode */ 
@@ -39,7 +38,7 @@ export class ChildComponent extends LitElement {
     `
   }
 
-  render() {
+  render () {
     return html`
       <div>
         <h2>Child Component</h2>

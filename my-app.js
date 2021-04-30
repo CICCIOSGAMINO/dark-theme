@@ -1,10 +1,9 @@
-import { LitElement, html, css } from 'lit-element'
+import { LitElement, html, css } from 'lit'
 
 import './child-component'
 
 export class MyApp extends LitElement {
-  
-  static get properties() {
+  static get properties () {
     return {
       dark: {
         type: Boolean,
@@ -13,15 +12,8 @@ export class MyApp extends LitElement {
     }
   }
 
-  constructor() {
-    super()
-    this.dark = false
-  }
-
-  static get styles() {
-
+  static get styles () {
     return css`
-
       /* handle the light / dark mode */ 
       :host:not([dark]) {
         --bk-color: #fff;
@@ -49,23 +41,27 @@ export class MyApp extends LitElement {
     `
   }
 
-  _checked(event) {
+  #checked (event) {
     this.dark = event.target.checked
   }
 
-  render() {
+  render () {
     return html`
       <div id="container">
         <h1>${this.dark ? 'DARK' : 'LIGHT'} Theme</h1>
         <hr>
-        <input type="checkbox" id="dark_label" name="dark" @click="${this._checked}">
+        <input
+          id="dark_label"
+          type="checkbox" 
+          name="dark"
+          @click=${this.#checked}
+          .checked=${this.dark}>
         <label for="dark"> Dark Theme</label><br>
 
         <child-component ?dark="${this.dark}"></child-component>
       </div>
     `
   }
-
 }
 
 customElements.define('my-app', MyApp)
