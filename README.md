@@ -2,6 +2,8 @@ Dark Theme
 ==========
 [TOC]
 
+https://web.dev/prefers-color-scheme/
+
 A dark theme is a low-light UI that displays mostly DARK surfaces. Thinking at when you at night switching between sreens with no light at all. This is a simple example to handle the attribute **dark** in the simple app build on top of LitElement to sync all the UI components that needs to change within dark / light theme.
 
  # is Supported
@@ -28,9 +30,23 @@ to do that in Chrome (from v79):
  
 
 # WebComponents WebApp and Lit
-Building a component or complex app on top of LitElement means keep in mind the use of CustomElement, Template and Shadow DOM in a javascript coded element. In this easy post i'll show a simple web app shell based on MyApp LitElement component in charge of sync the dark property, used to style in light and dark mode the app element, the app's childs elements and the upper body parent.
+Building a component or complex app on top of LitElement means keep in mind the use of CustomElement, Template and Shadow DOM in a javascript coded element. In this easy post i'll show a simple web app shell based on Lite WebApp build on Lit. With good CSS custom properties and HLS you can easly handle the @media-query for the color-scheme:
 
-When the dark mode is triggered by the media-query **prefers-color-scheme** an attribute is set to the main WebApp component and as a property descend the components tree to trigger the elements that need to know about the change. 
+```css
+:root {
+  /* This nice final touch tells the browser that this page supports both dark and light themes. 
+  The browser rewards us with dark form controls. */
+  color-scheme: dark light;
+
+  /* Handle the default (eg. dark mode) and listening with 
+     @media-query for the light mode */ 
+}
+@media (prefers-color-scheme: light) {
+
+}
+```
+
+When the dark mode is triggered by the media-query **prefers-color-scheme** an attribute is set to the main WebApp component and as a property descend the components tree to trigger the same property to the elements that needs to know about the prefers-color-scheme outside the CSS custom properties. If you can handle the prefers-color-scheme only with the CSS custom properties you don't need to set the element property.
 
 When the dark mode is triggered by the toggle button into the WebApp, the property dark is set and reflected to the attribute dark on the main WebApp element.
 

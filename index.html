@@ -19,25 +19,150 @@
   <title>Dark Theme</title>
 
   <style>
+    :root {
+      /* This nice final touch tells the browser that this page supports both dark and light themes. 
+      The browser rewards us with dark form controls. */
+      color-scheme: dark light;
 
-    html {
-      /* light and dark custom vars */
-      --bk-color: #fff;
-      --color: #222;
-      
-      --bk-color-dark: #222;
-      --color-dark: whitesmoke;
+      /* Default light color-scheme */
+
+      /* destructure brand channels, from color #0af (app color) to hsl(200, 100%, 50%)
+         The three HSL channels have been extracted and placed into their own custom properties.*/
+      --hue: 200;
+      --saturation: 100%;
+      --lightness: 50%;
+
+      --brand: hsl(
+        var(--hue) 
+        calc(var(--saturation))
+        var(--lightness) 
+      );
+
+      /* In the light theme the text colors are very dark blue. Seeing 10% and 30% as the 
+        lightness values for the HSL color should signal to you that these colors are dark. */
+
+      /* very dark brand blue */
+      --text1: hsl(
+        var(--hue) 
+        var(--saturation)
+        10% /* lower is darker */
+      );
+
+      --text2: hsl(
+        var(--hue) 
+        calc(var(--saturation) / 2)
+        30%
+      );
+
+      /* These surface colors are the first to break patterns. What could have appeared as 
+       pretty reasonable and linear so far is now broken. The nice thing is that you can play 
+       with HSL light-theme color combinations right here in code, and adjust lightness and 
+       saturation to create a nice light color scheme that's not too cool or blue. */
+    
+      /* very bright brand white */
+      --surface1: hsl(
+        var(--hue) 
+        calc(var(--saturation) / 6) 
+        90% /* higher is lighter */
+      );
+
+      --surface2: hsl(
+        var(--hue) 
+        calc(var(--saturation) / 8) 
+        99% 
+      );
+
+      --surface3: hsl(
+        var(--hue) 
+        calc(var(--saturation) / 8) 
+        96% 
+      );
+
+      --surface4: hsl(
+        var(--hue) 
+        calc(var(--saturation) / 8) 
+        85% 
+      );
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        /* build colors with props
+          Since your color scheme is dark by default, it's good practice to desaturate colors 
+          for use on dark surfaces (they can otherwise vibrate to the eye or be inaccessible).
+          To desaturate your brand color, you use the hue and lightness as is, but cut the 
+          saturation in half with some division: calc(var(--saturation) / 2). Now your brand 
+          color is properly on theme, but desaturated for use. */
+        --brand: hsl(
+          var(--hue) 
+          calc(var(--saturation) / 2)
+          var(--lightness) 
+        );
+
+        /* For the reading text in our dark theme, you use the brand hue as a base, but build 
+          nearly white colors from it. Many users will think the text is white, while it's 
+          actually very light blue. Staying within hue is a strong way to create design harmony. 
+          --text1 is 85% white and --text2 is 65% white, and both have very little saturation. */
+        --text1: hsl(var(--hue) 15% 85%);
+        --text2: hsl(var(--hue) 15% 65%);
+
+        /* The text is very light because surfaces will be dark in dark mode. Where text colors 
+          were using high lightness values (85% and higher), surfaces will use lower values (30% 
+          and lower). Having a healthy span between lightness ranges between surface and text 
+          will help ensure accessible colors for users to read.
+
+          Notice how the colors start at the darkest grey with 10% lightness and 10% saturation, 
+          then desaturate as they become lighter. Each new surface is 5% lighter than the previous.
+          Saturation is dropped a little too in the lighter surfaces. Try putting your surfaces 
+          all to 10% saturation. Do you like it more or less? */
+        --surface1: hsl(var(--hue) 10% 10%);
+        --surface2: hsl(var(--hue) 10% 15%);
+        --surface3: hsl(var(--hue) 5%  20%);
+        --surface4: hsl(var(--hue) 5% 25%);
+
+      }
     }
 
     body:not([dark]) {
-      /* custom var and fallback value */ 
-      background-color: var(--bk-color, #fff);
-      color: var(--color, #222)
+
+      --hue: 200;
+      --saturation: 100%;
+      --lightness: 50%;
+
+      --brand: hsl(var(--hue) calc(var(--saturation))var(--lightness) );
+
+      /* In the light theme the text colors are very dark blue. Seeing 10% and 30% as the 
+        lightness values for the HSL color should signal to you that these colors are dark. */
+
+      /* very dark brand blue */
+      --text1: hsl(var(--hue) var(--saturation)10% /* lower is darker */);
+      --text2: hsl(var(--hue) calc(var(--saturation) / 2)30%);
+    
+      /* very bright brand white */
+      --surface1: hsl(var(--hue) calc(var(--saturation) / 6) 90% /* higher is lighter */);
+      --surface2: hsl(var(--hue) calc(var(--saturation) / 8) 99% );
+      --surface3: hsl(var(--hue) calc(var(--saturation) / 8) 96% );
+      --surface4: hsl(var(--hue) calc(var(--saturation) / 8) 85%);
+
+      background-color: var(--surface1);
+      color: var(--text1);
     }
     body[dark] {
-      /* custom var and fallback value */ 
-      background-color: var(--bk-color-dark, #121212);
-      color: var(--color-dark, whitesmoke)
+      --brand: hsl(
+        var(--hue) 
+        calc(var(--saturation) / 2)
+        var(--lightness) 
+      );
+
+      --text1: hsl(var(--hue) 15% 85%);
+      --text2: hsl(var(--hue) 15% 65%);
+      --surface1: hsl(var(--hue) 10% 10%);
+      --surface2: hsl(var(--hue) 10% 15%);
+      --surface3: hsl(var(--hue) 5%  20%);
+      --surface4: hsl(var(--hue) 5% 25%);
+
+      background-color: var(--surface1);
+      color: var(--text1);
     }
 
     body  {
@@ -72,35 +197,76 @@
     const callback = (mutationsList, observer) => {
       for(let mutation of mutationsList) {
         if (mutation.type === 'attributes' && mutation.attributeName === 'dark') {
-            // console.log(`@DARK >> ${app.hasAttribute('dark')}`)
-            app.hasAttribute('dark') ? 
+            /* app.hasAttribute('dark') ? 
               body.setAttribute('dark', '') :
-              body.removeAttribute('dark')
+              body.removeAttribute('dark') */
+        }
+        if (mutation.type === 'attributes' && mutation.attributeName === 'light') {
+            /* app.hasAttribute('light') ? 
+              body.setAttribute('light', '') :
+              body.removeAttribute('light') */
         }
       }
     }
+
+    const setLight = () => {
+      app.setAttribute('light', '')
+      app.removeAttribute('dark')
+      body.setAttribute('light', '')
+      body.removeAttribute('dark')
+    }
+
+    const setDark = () => {
+      app.setAttribute('dark', '')
+      app.removeAttribute('light')
+      body.setAttribute('dark', '')
+      body.removeAttribute('light')
+    }
+
+
 
     const observer = new MutationObserver(callback)
 
     // Check if dark mode is supported by browser
     if (window.matchMedia('(prefers-color-scheme)').media !== 'not all') {
         console.log('@DARK-MODE >> Supported 🎉')
+
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          setDark()
+        } else {
+          setLight()
+        }
+
         // init the observer to dark attribute
         observer.observe(app, config)
         
-        // init the listener to
+        // init listening to dark scheme
         window.matchMedia('(prefers-color-scheme: dark)').addListener((e) => {
-          const darkModeOn = e.matches;
-          darkModeOn ? 
-            app.setAttribute('dark', '') : 
-            app.removeAttribute('dark')
-          
-          console.log(`@DARK-MODE >> ${darkModeOn ? '🌒 ON' : '🌕 OFF'}`)
+          if (e.matches) {
+            setDark()
+            console.log(`@DARK-MODE >> 🌒 ON`)
+          }
+        })
+
+        // init listening to light scheme
+        window.matchMedia('(prefers-color-scheme: light)').addListener((e) => {
+          if (e.matches) {
+            setLight()
+            console.log(`@LIGHT-MODE >> 🌕 ON`)
+          }
         })
 
       } else {
         console.log('@DARK-MODE >> NOT Supported 🤢')
       }
+
+      // listen for the dark event, set the dark / light theme from app element
+      window.addEventListener('dark', () => {
+        setDark()
+      })
+      window.addEventListener('light', () => {
+        setLight()
+      })
   </script>
 
 </body>

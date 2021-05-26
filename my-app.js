@@ -14,21 +14,11 @@ export class MyApp extends LitElement {
 
   static get styles () {
     return css`
-      /* handle the light / dark mode */ 
-      :host:not([dark]) {
-        --bk-color: #fff;
-        --bk-second-color: #e0e0e0e;
-      }
-      :host([dark]) {
-        --bk-color: #666;
-        --bk-second-color: #004c8c;
-      }
-
       :host {
         display: block;
         margin: 2em;
         padding: 2em;
-        background-color: var(--bk-color, #fff);
+        background-color: var(--surface1);
       }
 
       #container {
@@ -36,13 +26,26 @@ export class MyApp extends LitElement {
         margin: 2em;
         padding: 1em;
         text-align: center;
-        background-color: var(--bk-second-color, #e0e0e0);
+        background-color: var(--surface2);
       }
     `
   }
 
   #checked (event) {
     this.dark = event.target.checked
+    const eDark = new CustomEvent('dark', {
+      bubbles: true,
+      composed: true,
+      detail: 'dark'
+    })
+    const eLight = new CustomEvent('light', {
+      bubbles: true,
+      composed: true,
+      detail: 'light'
+    })
+    event.target.checked ? 
+      this.dispatchEvent(eDark) :
+      this.dispatchEvent(eLight)
   }
 
   render () {
@@ -56,7 +59,7 @@ export class MyApp extends LitElement {
           name="dark"
           @click=${this.#checked}
           .checked=${this.dark}>
-        <label for="dark"> Dark Theme</label><br>
+        <label for="dark"> Dark / Light Theme</label><br>
 
         <child-component ?dark="${this.dark}"></child-component>
       </div>
